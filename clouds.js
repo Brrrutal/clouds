@@ -3,19 +3,23 @@ var camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHe
 
 var renderer = new THREE.WebGLRenderer();
 renderer.setSize( window.innerWidth, window.innerHeight );
+renderer.setClearColor( 0xffffff );
 document.body.appendChild( renderer.domElement );
 
-var directionalLight = new THREE.DirectionalLight( 0xffffff, 0.8 );
-directionalLight.position.set( 0, 1, 0 );
-scene.add( directionalLight );
+var light = new THREE.PointLight( 0xffffff, 1, 100 );
+light.position.set( 20, 20, 20 );
+scene.add( light );
  
-var geometry = new THREE.TorusGeometry( 10, 4, 16, 100 );
+var geometry = new THREE.PlaneGeometry( 10, 10 );
 var material = new THREE.MeshPhongMaterial( 
     { 
         color: 0xccffee, 
-        specular: 0x009900, 
-        shininess: 30, 
-        shading: THREE.SmoothShading 
+        specular: 0x009933, 
+        shininess: 5, 
+        shading: THREE.SmoothShading,
+        map: THREE.ImageUtils.loadTexture("maps/white-pool-ball.png"),
+        normalMap: THREE.ImageUtils.loadTexture(
+                "maps/normal02.png" ),
     });
 
 var cube = new THREE.Mesh( geometry, material ); 
@@ -26,10 +30,8 @@ camera.position.z = 50;
 function render() 
 { 
     requestAnimationFrame( render ); 
-
-    cube.rotation.x += 0.02; 
-    cube.rotation.y += 0.02;
-
+    light.position.x -= 0.5;
+    light.position.y -= 0.2;
     renderer.render( scene, camera ); 
 } 
 
