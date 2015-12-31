@@ -25,23 +25,20 @@ var material = new THREE.ShaderMaterial(
         vertexShader: shader.vertexShader,
         fragmentShader: shader.fragmentShader
     });
+
+var cloud = new Cloud(new THREE.Vector2(20, 20), material); 
+var cloud2 = new Cloud(new THREE.Vector2(20, 20), material); 
  
-// Setting up scene geometry.
-var geometry = new THREE.PlaneGeometry(20, 20);
-var geometry2 = new THREE.PlaneGeometry(20, 20);
+cloud.mesh.position.x += 20.0;
 
-var cube = new THREE.Mesh(geometry, material); 
-var cube2 = new THREE.Mesh(geometry2, material);
-cube2.position.x += 20.0;
-
-scene.add( cube ); 
-scene.add( cube2 );
+scene.add(cloud.mesh); 
+scene.add(cloud2.mesh);
 
 function render() 
 { 
     requestAnimationFrame(render); 
-    cube.lookAt(camera.position);
-    cube2.lookAt(camera.position);
+    cloud.LookAt(camera);
+    cloud2.LookAt(camera);
     renderer.render(scene, camera); 
     controls.update();
 } 
