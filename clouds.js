@@ -1,21 +1,8 @@
 // Setting up renderer and hooking it up to the web page view.
-var renderer = new THREE.WebGLRenderer();
-renderer.setSize(window.innerWidth, window.innerHeight);
-renderer.setClearColor(0x00aaff);
-document.body.appendChild(renderer.domElement);
+var engine = new Engine(window.innerWidth, window.innerHeight);
+engine.AddLight(new THREE.Vector3(20, 20, 20));
 
-// Setting up main scene, camera and light.
-var scene = new THREE.Scene();
-
-var camera = new THREE.PerspectiveCamera(
-        75, window.innerWidth / window.innerHeight, 0.1, 1000);
-camera.position.z = 50;
-
-var controls = new THREE.OrbitControls(camera, renderer.domElement);
-
-var light = new THREE.PointLight(0xffffff, 1, 100);
-light.position.set(20, 20, 20);
-scene.add(light);
+document.body.appendChild(engine.renderer.domElement);
 
 // Setting up material for parts.
 var shader = CloudShader;
@@ -26,21 +13,24 @@ var material = new THREE.ShaderMaterial(
         fragmentShader: shader.fragmentShader
     });
 
-var cloud = new Cloud(new THREE.Vector2(20, 20), material); 
-var cloud2 = new Cloud(new THREE.Vector2(20, 20), material); 
- 
-cloud.mesh.position.x += 20.0;
+var particleSize = new THREE.Vector2(10, 10);
 
-scene.add(cloud.mesh); 
-scene.add(cloud2.mesh);
+var cloud = new Cloud();
+
+for (x = -50.0; x <= 50.0; x += 10.0)
+    for (y = -50.0; y <= 50.0; y += 10.0)
+    {
+        cloud.AddParticle(new Particle(
+                particleSize, new THREE.Vector2(x, y), material));
+    }
+
+cloud.AddToScene(engine.scene);
 
 function render() 
 { 
     requestAnimationFrame(render); 
-    cloud.LookAt(camera);
-    cloud2.LookAt(camera);
-    renderer.render(scene, camera); 
-    controls.update();
+    cloud.LookAt(engine.camera);
+    engine.Render();
 } 
 
 render();
