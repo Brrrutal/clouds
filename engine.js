@@ -11,6 +11,7 @@ Engine.Renderer = function(width, height, color)
     var renderer = new THREE.WebGLRenderer();
     renderer.setSize(width, height);
     renderer.setClearColor(color);
+    renderer.sortObjects = false;
     return renderer;
 };
 

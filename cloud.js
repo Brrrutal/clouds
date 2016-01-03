@@ -1,13 +1,31 @@
-function Particle(size, offset, material)
+function Particle(size, offset, color)
 {
     this.size = size;
-    this.mesh = Particle.Build(size, material);
+    this.mesh = Particle.Build(size, color);
     this.mesh.position.x += offset.x;
     this.mesh.position.y += offset.y;
 };
 
-Particle.Build = function(size, material)
+Particle.Build = function(size, color)
 {
+    // Setting up material.
+    var shader = CloudShader;
+
+    var uniforms = 
+        {
+            intensity: {type: 'f', value: color} 
+        };
+
+    var material = new THREE.ShaderMaterial( 
+        { 
+            transparent: true,
+            uniforms: uniforms,
+            vertexShader: shader.vertexShader,
+            fragmentShader: shader.fragmentShader
+        });
+
+    material.depthWrite = false;
+
     // Setting up scene geometry.
     var geometry = new THREE.PlaneGeometry(size.x, size.y);
     var mesh = new THREE.Mesh(geometry, material); 
