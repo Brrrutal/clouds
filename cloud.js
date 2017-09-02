@@ -4,6 +4,14 @@ function Particle(size, offset, color)
     this.mesh = Particle.Build(size, color);
     this.mesh.position.x += offset.x;
     this.mesh.position.y += offset.y;
+    this.mesh.rotation.y = Math.PI * 0.5;
+    this.mesh2 = Particle.Build(size, color);
+    this.mesh2.position.x += offset.x;
+    this.mesh2.position.y += offset.y;
+    this.mesh3 = Particle.Build(size, color);
+    this.mesh3.position.x += offset.x;
+    this.mesh3.position.y += offset.y;
+    this.mesh3.rotation.x = Math.PI * 0.5;
 };
 
 Particle.Build = function(size, color)
@@ -25,6 +33,7 @@ Particle.Build = function(size, color)
         });
 
     material.depthWrite = false;
+    material.side = THREE.DoubleSide;
 
     // Setting up scene geometry.
     var geometry = new THREE.PlaneGeometry(size.x, size.y);
@@ -56,7 +65,11 @@ Cloud.prototype.AddParticle = function(particle)
 Cloud.prototype.AddToScene = function(scene)
 {
     this.particles.forEach(function(particle)
-    { scene.add(particle.mesh); });
+    { 
+        scene.add(particle.mesh); 
+        scene.add(particle.mesh2); 
+        scene.add(particle.mesh3); 
+    });
 };
 
 Cloud.prototype.LookAt = function(camera)

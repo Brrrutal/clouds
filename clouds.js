@@ -24,7 +24,7 @@ cloud.AddToScene(engine.scene);
 function render() 
 { 
     requestAnimationFrame(render); 
-    cloud.LookAt(engine.camera);
+    //cloud.LookAt(engine.camera);
     engine.Render();
 } 
 
