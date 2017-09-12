@@ -24,10 +24,16 @@ Particle.Build = function(size, color)
             intensity: {type: 'f', value: color} 
         };
 
+    var shaderUniforms = THREE.UniformsUtils.merge([
+        THREE.UniformsLib['lights'],
+        uniforms
+    ]);
+
     var material = new THREE.ShaderMaterial( 
         { 
             transparent: true,
-            uniforms: uniforms,
+            lights: true,
+            uniforms: shaderUniforms,
             vertexShader: shader.vertexShader,
             fragmentShader: shader.fragmentShader
         });
@@ -76,6 +82,16 @@ Cloud.prototype.LookAt = function(camera)
 {
     this.particles.forEach(function(particle)
     { particle.LookAt(camera); });
+};
+
+Cloud.prototype.UpdateMaterial = function()
+{
+    this.particles.forEach(function(particle)
+    {
+       particle.mesh.material.needsUpdate;
+       particle.mesh2.material.needsUpdate;
+       particle.mesh3.material.needsUpdate; 
+    });
 };
 
 

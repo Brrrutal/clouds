@@ -22,10 +22,10 @@ Engine.Camera = function(width, height)
     return camera;
 };
 
-Engine.prototype.AddLight = function(position)
+Engine.prototype.AddLight = function(pos)
 {
-    var light = new THREE.PointLight(0xffffff, 1, 100);
-    light.position.set(position.x, position.y, position.z);
+    var light = new THREE.PointLight(0xffffff, 1);
+    light.position.set(pos.x, pos.y, pos.z);
     this.scene.add(light);
 };
 

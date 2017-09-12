@@ -1,6 +1,6 @@
 // Setting up renderer and hooking it up to the web page view.
 var engine = new Engine(window.innerWidth, window.innerHeight);
-engine.AddLight(new THREE.Vector3(20, 20, 20));
+engine.AddLight(new THREE.Vector3(20.0, 0.0, 0.0));
 
 document.body.appendChild(engine.renderer.domElement);
 
@@ -25,6 +25,7 @@ function animate()
 {
     requestAnimationFrame(animate); 
     engine.UpdateCamera();
+    cloud.UpdateMaterial();
     engine.Render();
 }
 
