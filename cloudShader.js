@@ -27,7 +27,7 @@ CloudShader =
         {
             vec2 uv = vUv - vec2(0.5, 0.5);
             float dist = 1.0 - step(0.5, sqrt(dot(uv, uv)));
-            gl_FragColor = vec4(1.0, 1.0, 1.0, fadeOff * dist);
+            gl_FragColor = vec4(vNormal, fadeOff * dist);
         }
     `
 };

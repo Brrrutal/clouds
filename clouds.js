@@ -21,12 +21,12 @@ for (x = -20.0; x <= 20.0; x += 10.0)
 
 cloud.AddToScene(engine.scene);
 
-function render() 
-{ 
-    requestAnimationFrame(render); 
-    //cloud.LookAt(engine.camera);
+function animate()
+{
+    requestAnimationFrame(animate); 
+    engine.UpdateCamera();
     engine.Render();
-} 
+}
 
-render();
+animate();
 
