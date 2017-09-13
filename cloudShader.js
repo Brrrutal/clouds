@@ -3,16 +3,13 @@ CloudShader =
     vertexShader: `
         precision highp float;
         varying vec2 vUv;
-        varying vec4 worldPos;
-        varying vec3 vecPos;
         varying vec3 vecNormal;
         varying vec3 vNormal;
         varying float fadeOff;
         void main()
         {
             gl_Position = projectionMatrix * modelViewMatrix * vec4( position, 1.0 );
-            worldPos = modelMatrix * vec4(position, 1.0);
-            vecPos = (modelViewMatrix * vec4(position, 1.0)).xyz;
+            vec4 worldPos = modelMatrix * vec4(position, 1.0);
             vecNormal = (modelViewMatrix * vec4(normal, 0.0)).xyz;
             vec3 worldNormal = normalize( mat3( modelMatrix[0].xyz, modelMatrix[1].xyz, modelMatrix[2].xyz ) * normal );
             vec3 I = worldPos.xyz - cameraPosition;
@@ -25,8 +22,6 @@ CloudShader =
     fragmentShader: `
         precision highp float;
         varying vec2 vUv;
-        varying vec4 worldPos;
-        varying vec3 vecPos;
         varying vec3 vecNormal;
         varying vec3 vNormal;
         varying float fadeOff;
@@ -46,19 +41,17 @@ CloudShader =
 
         void main()
         {
-            vec4 addedLights = vec4(0.0, 0.0, 0.0, 1.0);
+            vec3 lightDirection = vec3(0.0, 0.0, 1.0);
             for(int l = 0; l < NUM_POINT_LIGHTS; l++) 
             {
-                vec3 lightDirection = normalize(vecPos
-                            - pointLights[l].position);
-                addedLights.rgb += vec3(length(lightDirection)* 0.5);
-                //clamp( dot(-lightDirection, vecNormal), 0.0, 1.0) * vec3(1.0, 1.0, 1.0);
+                lightDirection = normalize(pointLights[l].position);
             }
-            vec4 worldLightPos = vec4(pointLights[0].position, 1.0);
-            float d = length(vecPos.xyz - worldLightPos.xyz) * 0.1;
+
+            float shading = dot(lightDirection, vecNormal);
+            
             vec2 uv = vUv - vec2(0.5, 0.5);
             float dist = 1.0 - step(0.5, sqrt(dot(uv, uv)));
-            gl_FragColor = vec4(1.0, 1.0, 1.0, fadeOff * dist) * d;// * addedLights;
+            gl_FragColor = vec4(shading, shading, shading, fadeOff * dist);
         }
     `
 };
