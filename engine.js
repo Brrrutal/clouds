@@ -18,15 +18,15 @@ Engine.Renderer = function(width, height, color)
 Engine.Camera = function(width, height)
 {
     var camera = new THREE.PerspectiveCamera(75, width / height, 0.1, 1000);
-    camera.position.z = 20;
+    camera.position.z = 50;
     return camera;
 };
 
 Engine.prototype.AddLight = function(pos)
 {
-    var light = new THREE.PointLight(0xffffff, 1);
-    light.position.set(pos.x, pos.y, pos.z);
-    this.scene.add(light);
+    this.light = new THREE.PointLight(0xffffff, 1);
+    this.light.position.set(pos.x, pos.y, pos.z);
+    this.scene.add(this.light);
 };
 
 Engine.prototype.UpdateCamera = function()
@@ -37,6 +37,15 @@ Engine.prototype.UpdateCamera = function()
     this.camera.position.y = 50.0 * Math.sin(t);
     this.camera.up = new THREE.Vector3(0.0, 0.0, 1.0);
     this.camera.lookAt(new THREE.Vector3(0.0, 0.0, 0.0));
+};
+
+Engine.prototype.UpdateLight = function()
+{
+    this.timer += 0.005;
+    var t = this.timer;
+    this.light.position.x = 50.0 * Math.cos(t);
+    this.light.position.y = 50.0 * Math.sin(t);
+    this.light.position.z = 30.0;
 };
 
 Engine.prototype.Render = function()

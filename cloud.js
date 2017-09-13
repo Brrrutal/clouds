@@ -21,7 +21,8 @@ Particle.Build = function(size, color)
 
     var uniforms = 
         {
-            intensity: {type: 'f', value: color} 
+            intensity: {type: 'f', value: color}, 
+            normalMap: {type: 't', value: null}
         };
 
     var shaderUniforms = THREE.UniformsUtils.merge([
@@ -37,6 +38,15 @@ Particle.Build = function(size, color)
             vertexShader: shader.vertexShader,
             fragmentShader: shader.fragmentShader
         });
+
+    // instantiate a loader
+    var loader = new THREE.TextureLoader();
+
+    //allow cross origin loading
+    //loader.crossOrigin = '';
+
+    var normalImage = loader.load("maps/sphere.jpg");
+    material.uniforms.normalMap.value = normalImage;
 
     material.depthWrite = false;
     material.side = THREE.DoubleSide;

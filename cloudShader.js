@@ -15,7 +15,7 @@ CloudShader =
             vec3 I = worldPos.xyz - cameraPosition;
             fadeOff = abs(dot( normalize( I ), worldNormal ));
             vUv = uv;
-            vNormal = worldNormal;
+            vNormal = normal;
         }
     `,
 
@@ -26,6 +26,8 @@ CloudShader =
         varying vec3 vNormal;
         varying float fadeOff;
         uniform float intensity;
+        uniform sampler2D normalMap;
+        uniform mat4 modelViewMatrix;
 
         struct PointLight {
             vec3 color;
@@ -47,7 +49,9 @@ CloudShader =
                 lightDirection = normalize(pointLights[l].position);
             }
 
-            float shading = dot(lightDirection, vecNormal);
+            vec3 normal = texture2D(normalMap, vUv).xyz;
+            vec3 vecNormal2 = (modelViewMatrix * vec4(normal, 0.0)).xyz;
+            float shading = abs(dot(lightDirection, vecNormal2));
             
             vec2 uv = vUv - vec2(0.5, 0.5);
             float dist = 1.0 - step(0.5, sqrt(dot(uv, uv)));
