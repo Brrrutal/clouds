@@ -1,6 +1,6 @@
 // Setting up renderer and hooking it up to the web page view.
 var engine = new Engine(window.innerWidth, window.innerHeight);
-engine.AddLight(new THREE.Vector3(100.0, 0.0, 0.0));
+engine.AddLight(new THREE.Vector3(100.0, 100.0, 100.0));
 
 document.body.appendChild(engine.renderer.domElement);
 
@@ -19,13 +19,15 @@ for (x = -20.0; x <= 20.0; x += 10.0)
     color += 0.2;
 }
 
+
 cloud.AddToScene(engine.scene);
 
 function animate()
 {
     requestAnimationFrame(animate); 
-    //engine.UpdateLight();
-    cloud.UpdateMaterial();
+    engine.UpdateLight();
+    cloud.UpdateMaterial(engine.light.getWorldPosition());
+    engine.UpdateCamera();
     engine.Render();
 }
 

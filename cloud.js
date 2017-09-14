@@ -1,39 +1,43 @@
 function Particle(size, offset, color)
 {
+    this.meshes = []
+
     this.size = size;
-    this.mesh = Particle.Build(size, color);
-    this.mesh.position.x += offset.x;
-    this.mesh.position.y += offset.y;
-    this.mesh.rotation.y = Math.PI * 0.5;
-    this.mesh2 = Particle.Build(size, color);
-    this.mesh2.position.x += offset.x;
-    this.mesh2.position.y += offset.y;
-    this.mesh3 = Particle.Build(size, color);
+
+    var particleXZ = Particle.Build(size, color, 1);
+    particleXZ.position.x += offset.x;
+    particleXZ.position.y += offset.y;
+    particleXZ.rotation.y = Math.PI * 0.5;
+    this.meshes.push(particleXZ)
+
+    var particle = Particle.Build(size, color, 1);
+    particle.position.x += offset.x;
+    particle.position.y += offset.y;
+    this.meshes.push(particle)
+
+    /*
+    this.mesh3 = Particle.Build(size, color, 2);
     this.mesh3.position.x += offset.x;
     this.mesh3.position.y += offset.y;
     this.mesh3.rotation.x = Math.PI * 0.5;
+    */
 };
 
-Particle.Build = function(size, color)
+Particle.Build = function(size, color, orientation)
 {
     // Setting up material.
     var shader = CloudShader;
 
-    var uniforms = 
+    var shaderUniforms = 
         {
-            intensity: {type: 'f', value: color}, 
+            intensity: {type: 'f', value: color},
+            lightPosition: {type: 'v3', value: new THREE.Vector3(0, 0, 0) },
             normalMap: {type: 't', value: null}
         };
-
-    var shaderUniforms = THREE.UniformsUtils.merge([
-        THREE.UniformsLib['lights'],
-        uniforms
-    ]);
 
     var material = new THREE.ShaderMaterial( 
         { 
             transparent: true,
-            lights: true,
             uniforms: shaderUniforms,
             vertexShader: shader.vertexShader,
             fragmentShader: shader.fragmentShader
@@ -41,9 +45,6 @@ Particle.Build = function(size, color)
 
     // instantiate a loader
     var loader = new THREE.TextureLoader();
-
-    //allow cross origin loading
-    //loader.crossOrigin = '';
 
     var normalImage = loader.load("maps/sphere.jpg");
     material.uniforms.normalMap.value = normalImage;
@@ -82,9 +83,10 @@ Cloud.prototype.AddToScene = function(scene)
 {
     this.particles.forEach(function(particle)
     { 
-        scene.add(particle.mesh); 
-        scene.add(particle.mesh2); 
-        scene.add(particle.mesh3); 
+        particle.meshes.forEach(function(mesh)
+        {
+            scene.add(mesh); 
+        });
     });
 };
 
@@ -94,13 +96,15 @@ Cloud.prototype.LookAt = function(camera)
     { particle.LookAt(camera); });
 };
 
-Cloud.prototype.UpdateMaterial = function()
+Cloud.prototype.UpdateMaterial = function(lightPos)
 {
     this.particles.forEach(function(particle)
     {
-       particle.mesh.material.needsUpdate;
-       particle.mesh2.material.needsUpdate;
-       particle.mesh3.material.needsUpdate; 
+        particle.meshes.forEach(function(mesh)
+        {
+            mesh.material.uniforms.lightPosition.value = lightPos;
+            mesh.material.needsUpdate = true;
+        });
     });
 };
 

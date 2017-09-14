@@ -3,7 +3,8 @@ function Engine(width, height)
     this.renderer = Engine.Renderer(width, height, 0x00aaff);
     this.camera = Engine.Camera(width, height);
     this.scene = new THREE.Scene();
-    this.timer = 0.0;
+    this.cameraTimer = 0.0;
+    this.lightTimer = 0.0;
 };
 
 Engine.Renderer = function(width, height, color)
@@ -18,21 +19,20 @@ Engine.Renderer = function(width, height, color)
 Engine.Camera = function(width, height)
 {
     var camera = new THREE.PerspectiveCamera(75, width / height, 0.1, 1000);
-    camera.position.z = 50;
+    camera.position.z = 30;
     return camera;
 };
 
 Engine.prototype.AddLight = function(pos)
 {
-    this.light = new THREE.PointLight(0xffffff, 1);
+    this.light = new THREE.Object3D();
     this.light.position.set(pos.x, pos.y, pos.z);
-    this.scene.add(this.light);
 };
 
 Engine.prototype.UpdateCamera = function()
 {
-    this.timer += 0.005;
-    var t = this.timer;
+    this.cameraTimer += 0.001;
+    var t = this.cameraTimer;
     this.camera.position.x = 50.0 * Math.cos(t);
     this.camera.position.y = 50.0 * Math.sin(t);
     this.camera.up = new THREE.Vector3(0.0, 0.0, 1.0);
@@ -41,11 +41,11 @@ Engine.prototype.UpdateCamera = function()
 
 Engine.prototype.UpdateLight = function()
 {
-    this.timer += 0.005;
-    var t = this.timer;
-    this.light.position.x = 50.0 * Math.cos(t);
-    this.light.position.y = 50.0 * Math.sin(t);
-    this.light.position.z = 30.0;
+    this.lightTimer += 0.05;
+    var t = this.lightTimer;
+    this.light.position.x = 100.0 * Math.cos(t);
+    this.light.position.y = 100.0 * Math.sin(t);
+    this.light.position.z = 50.0;
 };
 
 Engine.prototype.Render = function()
