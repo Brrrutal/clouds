@@ -10,15 +10,33 @@ function Particle(size, offset, color)
     particleXZ.rotation.y = Math.PI * 0.5;
     this.meshes.push(particleXZ)
 
+    particleXZ = Particle.Build(size, color, 1);
+    particleXZ.position.x += offset.x;
+    particleXZ.position.y += offset.y;
+    particleXZ.rotation.y = -Math.PI * 0.5;
+    this.meshes.push(particleXZ)
+
+    
     var particle = Particle.Build(size, color, 1);
     particle.position.x += offset.x;
     particle.position.y += offset.y;
+    this.meshes.push(particle)
+
+    particle = Particle.Build(size, color, 1);
+    particle.position.x += offset.x;
+    particle.position.y += offset.y;
+    particle.rotation.x = Math.PI;
     this.meshes.push(particle)
 
     var particleYZ = Particle.Build(size, color, 1);
     particleYZ.position.x += offset.x;
     particleYZ.position.y += offset.y;
     particleYZ.rotation.x = Math.PI * 0.5;
+    this.meshes.push(particleYZ)
+    particleYZ = Particle.Build(size, color, 1);
+    particleYZ.position.x += offset.x;
+    particleYZ.position.y += offset.y;
+    particleYZ.rotation.x = -Math.PI * 0.5;
     this.meshes.push(particleYZ)
 };
 
@@ -49,7 +67,7 @@ Particle.Build = function(size, color, orientation)
     material.uniforms.normalMap.value = normalImage;
 
     material.depthWrite = false;
-    material.side = THREE.DoubleSide;
+    //material.side = THREE.DoubleSide;
 
     // Setting up scene geometry.
     var geometry = new THREE.PlaneGeometry(size.x, size.y);

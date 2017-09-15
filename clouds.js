@@ -14,7 +14,7 @@ renderer.sortObjects = true;
 
 // Setup light
 var light = new THREE.Object3D();
-light.position.set(100.0, 100.0, 100.0);
+light.position.set(100.0, 0.0, 0.0);
 
 // Setup camera.
 var camera = new THREE.PerspectiveCamera(75, width / height, 0.1, 1000);
@@ -26,9 +26,6 @@ var scene = new THREE.Scene();
 // Animation timers.
 var cameraTimer = 0.0;
 var lightTimer = 0.0;
-
-//var engine = new Engine(window.innerWidth, window.innerHeight);
-//engine.AddLight();
 
 // Attach renderer to the Web page element
 document.body.appendChild(renderer.domElement);
@@ -54,6 +51,7 @@ function UpdateCamera(t, camera)
 {
     camera.position.x = 50.0 * Math.cos(t);
     camera.position.y = 50.0 * Math.sin(t);
+    //camera.position.z = 30.0 * Math.sin(t * 2.0);
     camera.up = new THREE.Vector3(0.0, 0.0, 1.0);
     camera.lookAt(new THREE.Vector3(0.0, 0.0, 0.0));
 };
@@ -62,15 +60,15 @@ function UpdateLight(t, light)
 {
     light.position.x = 100.0 * Math.cos(t);
     light.position.y = 100.0 * Math.sin(t);
-    light.position.z = 50.0;
+    //light.position.z = 50.0;
 };
 
 function animate()
 {
     requestAnimationFrame(animate); 
-    UpdateLight(lightTimer, light); lightTimer += 0.05;
+    UpdateLight(lightTimer, light); lightTimer += 0.0005;
     cloud.UpdateMaterial(light.getWorldPosition());
-    UpdateCamera(cameraTimer, camera); cameraTimer += 0.01;
+    UpdateCamera(cameraTimer, camera); cameraTimer += 0.001;
 
     renderer.render(scene, camera); 
 }
