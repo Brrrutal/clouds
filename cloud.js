@@ -15,12 +15,11 @@ function Particle(size, offset, color)
     particle.position.y += offset.y;
     this.meshes.push(particle)
 
-    /*
-    this.mesh3 = Particle.Build(size, color, 2);
-    this.mesh3.position.x += offset.x;
-    this.mesh3.position.y += offset.y;
-    this.mesh3.rotation.x = Math.PI * 0.5;
-    */
+    var particleYZ = Particle.Build(size, color, 1);
+    particleYZ.position.x += offset.x;
+    particleYZ.position.y += offset.y;
+    particleYZ.rotation.x = Math.PI * 0.5;
+    this.meshes.push(particleYZ)
 };
 
 Particle.Build = function(size, color, orientation)

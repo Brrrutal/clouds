@@ -31,9 +31,9 @@ CloudShader =
 
         void main()
         {
-            // texture2D(normalMap, vUv).xyz;
-            float shading = max(dot(wsNormal, wsLightPosition), 0.0);
-            vec3 color = vec3(shading, 0.0, 0.0);
+            vec3 wsNormal2 = texture2D(normalMap, vUv).xyz;
+            float shading = max(dot(wsNormal2, wsLightPosition), 0.0);
+            vec3 color = vec3(shading, shading, shading);
             
             vec2 uv = vUv - vec2(0.5, 0.5);
             float dist = 1.0 - step(0.5, sqrt(dot(uv, uv)));
