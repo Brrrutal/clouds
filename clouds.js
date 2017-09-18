@@ -14,7 +14,7 @@ renderer.sortObjects = true;
 
 // Setup light
 var light = new THREE.Object3D();
-light.position.set(100.0, 0.0, 0.0);
+light.position.set(100.0, 0.0, 50.0);
 
 // Setup camera.
 var camera = new THREE.PerspectiveCamera(75, width / height, 0.1, 1000);
@@ -66,9 +66,9 @@ function UpdateLight(t, light)
 function animate()
 {
     requestAnimationFrame(animate); 
-    UpdateLight(lightTimer, light); lightTimer += 0.0005;
+    UpdateLight(lightTimer, light); lightTimer += 0.000;
     cloud.UpdateMaterial(light.getWorldPosition());
-    UpdateCamera(cameraTimer, camera); cameraTimer += 0.001;
+    UpdateCamera(cameraTimer, camera); cameraTimer += 0.01;
 
     renderer.render(scene, camera); 
 }

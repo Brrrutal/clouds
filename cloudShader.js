@@ -32,6 +32,7 @@ CloudShader =
         varying vec3 wsViewDirection;
         varying float fadeOff;
         uniform float intensity;
+        uniform sampler2D colorMap;
         uniform sampler2D normalMap;
 
         mat3 cotangent_frame( vec3 N, vec3 p, vec2 uv )
@@ -59,11 +60,11 @@ CloudShader =
             mat3 tbn = cotangent_frame(wsNormal, -wsViewDirection, vUv);
             vec3 pnormal = normalize(tbn * normalTex);
             float shading = max(dot(pnormal, wsLightPosition), 0.0);
-            vec3 color = vec3(shading, shading, shading);
+            vec4 colorTex = texture2D(colorMap, vUv);
+            vec3 color = colorTex.rgb * shading;
             
             vec2 uv = vUv - vec2(0.5, 0.5);
-            float dist = 1.0 - step(0.5, sqrt(dot(uv, uv)));
-            gl_FragColor = vec4(color, dist * fadeOff);
+            gl_FragColor = vec4(color, colorTex.a * fadeOff);
         }
     `
 };

@@ -49,6 +49,7 @@ Particle.Build = function(size, color, orientation)
         {
             intensity: {type: 'f', value: color},
             lightPosition: {type: 'v3', value: new THREE.Vector3(0, 0, 0) },
+            colorMap: {type: 't', value: null},
             normalMap: {type: 't', value: null}
         };
 
@@ -62,6 +63,9 @@ Particle.Build = function(size, color, orientation)
 
     // instantiate a loader
     var loader = new THREE.TextureLoader();
+
+    var colorImage = loader.load("maps/cloud.png");
+    material.uniforms.colorMap.value = colorImage;
 
     var normalImage = loader.load("maps/sphere.jpg");
     material.uniforms.normalMap.value = normalImage;
